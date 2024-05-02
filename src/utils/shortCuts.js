@@ -16,7 +16,7 @@ export const CartIcon = (
   <Feather name="shopping-bag" size={30} color={Colors.blue} />
 );
 export const BackIcon = (
-  <Entypo name="chevron-left" size={40} color={Colors.black} />
+  <Entypo name="chevron-small-left" size={40} color={Colors.black} />
 );
 export const searchIcon = (
   <AntDesign name="search1" size={30} color={Colors.black} />

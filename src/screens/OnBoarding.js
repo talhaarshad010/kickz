@@ -10,10 +10,21 @@ import {slider} from '../Json/onBoarding';
 import Colors from '../Styles/Colors';
 import MyText from '../components/TextComponent';
 import MyButton from '../components/CustomButton';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const OnBoarding = ({navigation}) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const flatListRef = useRef(null);
+
+  useEffect(() => {
+    // Check AsyncStorage for onboarding status
+    AsyncStorage.getItem('onboardingCompleted').then(value => {
+      if (value) {
+        // If onboarding status is set, navigate to the next screen
+        navigation.navigate('LogIn');
+      }
+    });
+  }, []);
 
   const renderItem = ({item}) => {
     return (
@@ -73,7 +84,10 @@ const OnBoarding = ({navigation}) => {
 
   const handleButtonPress = () => {
     if (currentIndex === slider.length - 1) {
-      navigation.navigate('LogIn');
+      AsyncStorage.setItem('onboardingCompleted', 'true').then(() => {
+        // Navigate to the login screen
+        navigation.navigate('LogIn');
+      });
     } else {
       flatListRef.current.scrollToIndex({
         index: currentIndex + 1,
@@ -109,7 +123,7 @@ const OnBoarding = ({navigation}) => {
           <MyButton
             onPress={handleButtonPress}
             text={buttonText()}
-            Color={Colors.white}
+            color={Colors.white}
             fontWeight={'bold'}
           />
         </View>

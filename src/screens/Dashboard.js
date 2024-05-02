@@ -15,19 +15,41 @@ import Colors from '../Styles/Colors';
 import {homeJson} from '../Json/homeJson';
 import MyText from '../components/TextComponent';
 import {useNavigation} from '@react-navigation/native';
+import {GetData} from '../store/Reducers/ProductsSlice';
+import {useDispatch, useSelector} from 'react-redux';
+import {useGetAllproductsQuery} from '../store/Reducers/CallingProducts';
 
 const Dashboard = () => {
   const navigation = useNavigation();
-  const [selectedItemIndex, setSelectedItemIndex] = useState(null);
+  const [selectedItemIndex, setSelectedItemIndex] = useState(0);
+  const [seeAll, setseeAll] = useState(false);
+  const dispatch = useDispatch();
+  // const productsData = useSelector(state => state);
+  // console.log('DDDDDD', productsData);
+  // const {data} = useGetAllproductsQuery();
+  // console.log('PRODUCTSSDATA', data);
 
   const renderItem = ({item, index}) => {
     const isSelected = index === selectedItemIndex;
     return (
       <TouchableOpacity
-        style={[styles.logoCont, isSelected && styles.selectedLogoCont]}
-        onPress={() => setSelectedItemIndex(index)}>
+        style={[
+          styles.logoCont,
+          {backgroundColor: isSelected ? Colors.blue : Colors.white},
+        ]}
+        onPress={
+          // handleGetData
+          () => {
+            setSelectedItemIndex(index);
+            // handleGetData();
+            // dispatch(GetData());
+          }
+        }>
         <Image
-          style={[styles.logo, isSelected && styles.selectedLogo]}
+          style={[
+            styles.logo,
+            {tintColor: isSelected ? Colors.white : Colors.black},
+          ]}
           resizeMode="center"
           source={item.img}
         />
@@ -43,7 +65,7 @@ const Dashboard = () => {
         </View>
         <TouchableOpacity
           onPress={() => {
-            navigation.navigate('Details');
+            navigation.navigate('Details', {data: item});
           }}
           style={styles.shoeChildCont2}>
           <View
@@ -89,7 +111,7 @@ const Dashboard = () => {
 
   return (
     <ScrollView>
-      <WrapperContainer>
+      <WrapperContainer style={{flex: 1}}>
         <View style={{marginBottom: responsiveHeight(3)}}>
           <MyHeader
             onPressleft={() => {
@@ -108,6 +130,7 @@ const Dashboard = () => {
 
           <View style={styles.mainLogoCont}>
             <FlatList
+              showsHorizontalScrollIndicator={false}
               horizontal
               data={brangLogos}
               renderItem={renderItem}
@@ -123,16 +146,24 @@ const Dashboard = () => {
               textStyle={styles.popularShoes}
             />
             <MyText
+              onPress={() => {
+                setseeAll(!seeAll);
+              }}
               color={Colors.blue}
               fontSize={responsiveFontSize(2)}
-              text={'See All'}
+              text={seeAll ? 'See less' : 'See All'}
               textStyle={styles.bestSeller}
             />
           </View>
-          <View>
+          <View
+            style={{
+              height: responsiveHeight(40),
+              paddingTop: responsiveHeight(2),
+            }}>
             <FlatList
-              horizontal
-              data={homeJson.slice(0, 2)}
+              showsVerticalScrollIndicator={false}
+              numColumns={2}
+              data={seeAll ? homeJson : homeJson.slice(0, 2)}
               renderItem={shoeItems}
               keyExtractor={(item, index) => index.toString()}
             />
@@ -195,6 +226,7 @@ const styles = StyleSheet.create({
   },
   mainLogoCont: {
     marginVertical: responsiveHeight(3),
+    marginHorizontal: responsiveWidth(1),
   },
   logoCont: {
     justifyContent: 'space-around',
@@ -221,6 +253,7 @@ const styles = StyleSheet.create({
     marginHorizontal: responsiveWidth(2.5),
     borderRadius: responsiveWidth(5),
     backgroundColor: Colors.white,
+    marginBottom: responsiveHeight(2),
   },
   shoeImg: {height: responsiveHeight(15)},
   shoeChildCont1: {

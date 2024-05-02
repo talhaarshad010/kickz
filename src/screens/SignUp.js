@@ -1,5 +1,5 @@
 import {ScrollView, StyleSheet, TouchableOpacity, View} from 'react-native';
-import React from 'react';
+import React, {useState} from 'react';
 import {
   responsiveFontSize,
   responsiveHeight,
@@ -12,7 +12,64 @@ import MyHeader from '../components/Header';
 import MyText from '../components/TextComponent';
 import MyTextInput from '../components/TextInputComponent';
 import MyButton from '../components/CustomButton';
+import axios from 'axios';
+import {Sign_UP} from '../assets/config/urls';
+import ToastMessage from '../Hooks/ToastMessage';
+import {useSignupMutation} from '../store/Reducers/CallingProducts';
+import {checkMinLength, validateEmail} from '../utils/validations';
 const SignUp = ({navigation}) => {
+  const [email, setemail] = useState('');
+  const [password, setpassword] = useState('');
+  const [Name, setName] = useState('');
+  const {Toasts} = ToastMessage();
+  const [Signup] = useSignupMutation();
+  const isUserSignup = async () => {
+    //--------------------- using RTK QUERY function---------------------
+    try {
+      if (!email || !password || !Name) {
+        return Toasts('Error', 'Please fill all fields', 'error');
+      }
+
+      if (!validateEmail(email)) {
+        return Toasts('Error', 'Please enter a valid email address', 'error');
+      }
+
+      if (checkMinLength(password, 8, 'Password')) {
+        return Toasts(
+          'Error',
+          'Password must be at least 8 characters long',
+          'error',
+        );
+      }
+
+      const payload = {
+        userName: Name,
+        userEmail: email,
+        userPassword: password,
+      };
+      const res = await Signup(payload);
+      setemail('');
+      setpassword('');
+      setName('');
+      Toasts('Info', 'User Created Successfully', 'info');
+      console.log(res);
+    } catch (error) {
+      console.log('Error', error);
+    }
+
+    //--------------------- usinf axios function---------------------
+    // try {
+    //   const response = await axios.post(Sign_UP, {
+    //     userName: Name,
+    //     userEmail: email,
+    //     userPassword: password,
+    //   });
+    //   console.log('Data', response.data);
+    // } catch (err) {
+    //   console.log('Error', err.messasge);
+    // }
+  };
+
   return (
     <WrapperContainer>
       <View>
@@ -45,16 +102,22 @@ const SignUp = ({navigation}) => {
           <View style={styles.cont_01_01}>
             <View>
               <MyTextInput
+                onChangeText={setName}
+                value={Name}
                 placeholder={'Enter Name'}
                 feildName={'Your Name'}
                 textstyle={{fontSize: responsiveFontSize(1.2)}}
               />
               <MyTextInput
+                onChangeText={setemail}
+                value={email}
                 placeholder={'Enter e-mail or password'}
                 feildName={'Email Address'}
                 textstyle={{fontSize: responsiveFontSize(1.2)}}
               />
               <MyTextInput
+                onChangeText={setpassword}
+                value={password}
                 placeholder={'Password'}
                 feildName={'Password'}
                 RightView={true}
@@ -64,11 +127,12 @@ const SignUp = ({navigation}) => {
 
             <View>
               <MyButton
-                Color={Colors.white}
+                color={Colors.white}
                 fontWeight={'bold'}
                 style={styles.btn}
                 textstyle={{fontWeight: 'bold'}}
-                text={'Sign In'}
+                text={'Sign Up'}
+                onPress={isUserSignup}
               />
             </View>
           </View>
@@ -87,7 +151,6 @@ const SignUp = ({navigation}) => {
                 color={Colors.black}
                 fontSize={responsiveFontSize(2)}
                 text={'Sign In'}
-                textStyle={{color: Colors.black, fontWeight: 'bold'}}
               />
             </TouchableOpacity>
           </View>

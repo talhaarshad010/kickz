@@ -10,6 +10,7 @@ import Notification from '../screens/notification';
 import Orders from '../screens/Orders';
 import CustomDrawerContent from '../components/CustomDrawerContent';
 import BottomTab from './bottomTab';
+import AccSetting from '../screens/AccSetting';
 
 const Drawer = createDrawerNavigator();
 
@@ -23,12 +24,8 @@ const MyDrawer = () => {
       }}
       drawerContent={props => <CustomDrawerContent {...props} />}>
       <Drawer.Screen name="BottomTab" component={BottomTab} />
-      <Drawer.Screen name="Home" component={Dashboard} />
-      <Drawer.Screen name="Profile" component={Profile} />
-      <Drawer.Screen name="Cart" component={Cart} />
-      <Drawer.Screen name="Favourite" component={Favourite} />
       <Drawer.Screen name="Orders" component={Orders} />
-      <Drawer.Screen name="Notification" component={Notification} />
+      <Drawer.Screen name="Account & Settings" component={AccSetting} />
     </Drawer.Navigator>
   );
 };

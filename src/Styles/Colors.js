@@ -11,4 +11,8 @@ export default {
   grayInput: '#707070',
   lightgrayInput: 'lightgray',
   whiteinput: '#FFFFFFFF',
+
+  //backGround Colors
+  lightGray: '#F8F9FA',
+  red: '#FF5545',
 };

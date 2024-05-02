@@ -13,7 +13,7 @@ const MyButton = ({
   onPress = () => {},
   style,
   textstyle,
-  Color,
+  color,
   fontWeight,
   backgroundColor = Colors.blue, // Default background color
   textColor = Colors.white, // Default text color
@@ -23,7 +23,7 @@ const MyButton = ({
       onPress={onPress}
       style={{...styles.Container, backgroundColor, ...style}}>
       <MyText
-        color={Color}
+        color={color}
         fontSize={responsiveFontSize(2.5)}
         fontWeight={fontWeight}
         style={{...styles.textstyle, color: textColor, ...textstyle}}

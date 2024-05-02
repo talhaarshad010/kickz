@@ -52,8 +52,7 @@ const BottomTab = () => {
           }
           return <Ionicons name={iconName} size={size} color={color} />;
         },
-      })}
-      tabBarOptions={{}}>
+      })}>
       <Tab.Screen name="Home" component={Dashboard} />
       <Tab.Screen name="Favourite" component={Favourite} />
       <Tab.Screen name="Cart" component={Cart} />
