@@ -12,6 +12,7 @@ import {Provider} from 'react-redux';
 import {store} from './src/store/store';
 import Slots from './src/components/slots';
 import Toast from 'react-native-toast-message';
+import Logo from './src/screens/logo';
 
 const Appss = () => {
   return (

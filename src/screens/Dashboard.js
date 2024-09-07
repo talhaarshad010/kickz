@@ -1,5 +1,5 @@
 import {StyleSheet, Image, View, TouchableOpacity, Text} from 'react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import WrapperContainer from '../components/WrapperContainer';
 import MyHeader from '../components/Header';
 import {CartIcon, MenuIcon, searchIcon} from '../utils/shortCuts';
@@ -17,17 +17,17 @@ import MyText from '../components/TextComponent';
 import {useNavigation} from '@react-navigation/native';
 import {GetData} from '../store/Reducers/ProductsSlice';
 import {useDispatch, useSelector} from 'react-redux';
-import {useGetAllproductsQuery} from '../store/Reducers/CallingProducts';
+import {useGetAllproductsQuery} from '../store/Reducers/productsData';
 
 const Dashboard = () => {
   const navigation = useNavigation();
   const [selectedItemIndex, setSelectedItemIndex] = useState(0);
   const [seeAll, setseeAll] = useState(false);
   const dispatch = useDispatch();
-  // const productsData = useSelector(state => state);
-  // console.log('DDDDDD', productsData);
-  // const {data} = useGetAllproductsQuery();
-  // console.log('PRODUCTSSDATA', data);
+  const dd = useSelector(state => state.AllReducer.Auth);
+  const {data} = useGetAllproductsQuery();
+
+  console.log('DataProducts', data);
 
   const renderItem = ({item, index}) => {
     const isSelected = index === selectedItemIndex;
@@ -37,14 +37,7 @@ const Dashboard = () => {
           styles.logoCont,
           {backgroundColor: isSelected ? Colors.blue : Colors.white},
         ]}
-        onPress={
-          // handleGetData
-          () => {
-            setSelectedItemIndex(index);
-            // handleGetData();
-            // dispatch(GetData());
-          }
-        }>
+        onPress={() => {}}>
         <Image
           style={[
             styles.logo,

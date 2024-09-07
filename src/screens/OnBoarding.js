@@ -11,17 +11,17 @@ import Colors from '../Styles/Colors';
 import MyText from '../components/TextComponent';
 import MyButton from '../components/CustomButton';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {useNavigation} from '@react-navigation/native';
 
-const OnBoarding = ({navigation}) => {
+const OnBoarding = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const flatListRef = useRef(null);
+  const navigation = useNavigation();
 
   useEffect(() => {
-    // Check AsyncStorage for onboarding status
     AsyncStorage.getItem('onboardingCompleted').then(value => {
       if (value) {
-        // If onboarding status is set, navigate to the next screen
-        navigation.navigate('LogIn');
+        navigation.replace('LogIn');
       }
     });
   }, []);
@@ -37,7 +37,14 @@ const OnBoarding = ({navigation}) => {
               style={styles.bg2}
               source={require('../assets/Images/bgImages/NikeBG.png')}
               resizeMode="center">
-              <Image source={item.img} resizeMode="center" />
+              <Image
+                source={item.img}
+                resizeMode="center"
+                style={{
+                  height: responsiveHeight(30),
+                  // width: responsiveWidth(100),
+                }}
+              />
             </ImageBackground>
           </ImageBackground>
         </View>
@@ -172,7 +179,7 @@ const styles = StyleSheet.create({
   indicatorContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginTop: 10,
+    marginTop: responsiveHeight(2),
   },
   indicatorMainCont: {
     position: 'absolute',

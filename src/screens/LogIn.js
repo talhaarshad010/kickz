@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   View,
   ActivityIndicator,
+  Button,
 } from 'react-native';
 import React, {useState} from 'react';
 import {
@@ -29,77 +30,43 @@ import axios from 'axios';
 import {checkMinLength, validateEmail} from '../utils/validations';
 import {apiPost} from '../config/newHelper';
 import {useLoginMutation} from '../store/Reducers/CallingProducts';
+import ProductsSlice, {GetData} from '../store/Reducers/ProductsSlice';
 const LogIn = ({}) => {
   const [isLoading, setLoading] = useState(false);
-  const dataa = useSelector(state => state.AllReducer.AuthSlice.data);
+  const dataa = useSelector(state => state.AllReducer.Auth.data);
   const dispatch = useDispatch();
   const [value, setvalue] = useState({
     Email: 'Admin@gmail.com',
     Pass: '12345678',
   });
   const {Toasts} = ToastMessage();
-  console.log('Data', dataa);
-  const navigation = useNavigation();
-  const [Login] = useLoginMutation();
 
+  const navigation = useNavigation();
+
+  const [Login] = useLoginMutation();
+  const dd = useSelector(state => state);
+  console.log('Redux', dd);
   //---------------USER LOGIN FUNCTION---------------
   const isUserLogin = async () => {
-    const passwordError = checkMinLength(value.Pass, 8, 'password');
-    if (!value.Pass || !value.Email) {
-      return Toasts('Error', 'Please enter e-mail or password', 'info');
-    }
-    if (!validateEmail(value.Email)) {
-      return Toasts('Error', 'Please enter a valid email address', 'info');
-    }
-    if (passwordError) {
-      return Toasts('Error', passwordError, 'error');
-    }
-    setLoading(true);
-    //--------------- RTK QUERY ---------------
     try {
       const payload = {
         userEmail: value.Email,
         userPassword: value.Pass,
       };
+
       const res = await Login(payload);
-      const {userName, userEmail, isToken, userPassword} = res.data.data;
-      console.log('Token: ', isToken);
-      dispatch(userLOGIN(res.data.data));
-      console.log('userLoginData', {
-        userName,
-        userEmail,
-        isToken,
-        userPassword,
-      });
+      console.log('Userdata', res);
+      const {userName, userEmail, isToken} = res.data.data;
+      let payload1 = {
+        userName: userName,
+        userEmail: userEmail,
+        isToken: isToken,
+      };
+      dispatch(userLOGIN(payload1));
+      // navigation.navigate("")
     } catch (error) {
-      console.log('error', error);
+      console.log('Error', error.message);
     }
-
-    // try {
-    //   const payload = {
-    //     userEmail: value.Email,
-    //     userPassword: value.Pass,
-    //   };
-    // const res = await apiPost(LOG_IN, payload);
-    //   console.log('userData', res);
-    //   await dispatch(userLOGIN(res.data.isToken));
-    // } catch (error) {
-    //   console.log('Error', error);
-    // }
-    // try {
-
-    //   const response = await axios.post(LOG_IN, {
-    //     userEmail: value.Email,
-    //     userPassword: value.Pass,
-    //   });
-    //   const {data} = await response;
-    //
-    // } catch (err) {
-    //   console.log('Error', err);
-    //   Toasts('Error', err.message, 'error');
-    // } finally {
-    //   setLoading(false);
-    // }
   };
 
   return (
@@ -181,7 +148,9 @@ const LogIn = ({}) => {
                   <MyButton
                     color={Colors.white}
                     fontWeight={'bold'}
-                    onPress={isUserLogin}
+                    onPress={() => {
+                      isUserLogin();
+                    }}
                     style={styles.btn}
                     text={'Sign In'}
                   />

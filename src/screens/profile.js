@@ -24,13 +24,16 @@ const Profile = () => {
   //   setDecryptedPassword(decryptedPass);
   // }, []);
 
-  // const navigation = useNavigation();
+  const navigation = useNavigation();
   return (
     <WrapperContainer>
       <View>
         <MyHeader
           ScreenName={'Profile'}
           leftView={BackIcon}
+          onPressleft={() => {
+            navigation.goBack();
+          }}
           rightView={<AntDesign size={30} color={Colors.blue} name="edit" />}
         />
       </View>

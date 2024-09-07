@@ -14,25 +14,25 @@ import Colors from '../Styles/Colors';
 import {LOG_IN} from '../assets/config/urls';
 
 const CustomDrawerContent = props => {
-  const dataa = useSelector(state => state.AllReducer.AuthSlice.data);
+  const dataa = useSelector(state => state.AllReducer.data);
   const dispatch = useDispatch();
   const [selectedItem, setSelectedItem] = useState('Home');
-  useEffect(() => {
-    const fetchDataFromDatabase = async () => {
-      try {
-        // Make GET request to backend endpoint
-        const response = await axios.get(LOG_IN);
+  // useEffect(() => {
+  //   const fetchDataFromDatabase = async () => {
+  //     try {
+  //       // Make GET request to backend endpoint
+  //       const response = await axios.get(LOG_IN);
 
-        // Access data returned by database query
-        const {data} = response;
+  //       // Access data returned by database query
+  //       const {data} = response;
 
-        // Process the data as needed
-        console.log('Data from database:', data);
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
-    };
-  }, []);
+  //       // Process the data as needed
+  //       console.log('Data from database:', data);
+  //     } catch (error) {
+  //       console.error('Error fetching data:', error);
+  //     }
+  //   };
+  // }, []);
 
   const handleItemPress = item => {
     setSelectedItem(item);
@@ -92,7 +92,7 @@ const CustomDrawerContent = props => {
             fontSize={responsiveFontSize(3.5)}
             color={Colors.black}
             fontWeight={'bold'}
-            text={dataa.userName}
+            // text={dataa.userName}
             textStyle={{textAlign: 'center'}}
           />
         </View>

@@ -7,14 +7,12 @@ import {useSelector} from 'react-redux';
 
 const Routes = () => {
   const [userLogin, setuserLogin] = useState(false);
-  const dataa = useSelector(state => state.AllReducer.AuthSlice.data);
-  console.log('dataaa', dataa);
-  useEffect(() => {
-    dataa;
-  }, [dataa]);
+
+  const dd = useSelector(state => state.AllReducer.Auth);
+  console.log('dsdsdddddddddddddddddddddd', dd);
   return (
     <NavigationContainer>
-      {dataa ? <StackRoute /> : <AuthStack />}
+      {dd?.isToken ? <StackRoute /> : <AuthStack />}
     </NavigationContainer>
   );
 };

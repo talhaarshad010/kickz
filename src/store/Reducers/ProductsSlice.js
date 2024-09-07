@@ -1,9 +1,11 @@
 import {createAsyncThunk, createSlice} from '@reduxjs/toolkit';
 import axios from 'axios';
+import {userLOGIN} from './AuthSlice';
+import {store} from '../store';
+import {LOG_IN} from '../../assets/config/urls';
 
-export const GetData = createAsyncThunk('getProducts', async () => {
-  const res = await axios.get('https://dummyjson.com/products');
-  //   const result = await res.json();
+export const GetData = createAsyncThunk('LoginCheck', async data => {
+  const res = await axios.post(LOG_IN, data);
   console.log('Data', res);
   return res.data;
 });
@@ -12,6 +14,7 @@ const initialState = {
   data: null,
   isLoading: false,
   isError: false,
+  savetoLogin: [],
 };
 
 const getReducer = createSlice({

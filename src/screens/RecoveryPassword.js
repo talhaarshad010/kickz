@@ -1,5 +1,11 @@
-import {ScrollView, StyleSheet, TouchableOpacity, View} from 'react-native';
-import React, {useEffect} from 'react';
+import {
+  Modal,
+  ScrollView,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import React, {useEffect, useState} from 'react';
 import {
   responsiveFontSize,
   responsiveHeight,
@@ -13,6 +19,7 @@ import MyText from '../components/TextComponent';
 import MyTextInput from '../components/TextInputComponent';
 import MyButton from '../components/CustomButton';
 const RecoveryPassword = ({navigation}) => {
+  // const [isModel, setModel] = useState(false);
   return (
     <WrapperContainer>
       <MyHeader
@@ -51,12 +58,16 @@ const RecoveryPassword = ({navigation}) => {
 
             <View>
               <MyButton
+                // onPress={() => {
+                //   setModel(true);
+                // }}
                 fontWeight={'bold'}
-                Color={Colors.white}
+                color={Colors.white}
                 style={styles.btn}
                 textstyle={{fontWeight: 'bold'}}
-                text={'Sign In'}
+                text={'Send Code'}
               />
+              {/* <Modal></Modal> */}
             </View>
           </View>
         </View>

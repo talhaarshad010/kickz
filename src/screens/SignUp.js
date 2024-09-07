@@ -23,8 +23,8 @@ const SignUp = ({navigation}) => {
   const [Name, setName] = useState('');
   const {Toasts} = ToastMessage();
   const [Signup] = useSignupMutation();
+  //--------------------- using RTK QUERY function---------------------
   const isUserSignup = async () => {
-    //--------------------- using RTK QUERY function---------------------
     try {
       if (!email || !password || !Name) {
         return Toasts('Error', 'Please fill all fields', 'error');
@@ -56,18 +56,6 @@ const SignUp = ({navigation}) => {
     } catch (error) {
       console.log('Error', error);
     }
-
-    //--------------------- usinf axios function---------------------
-    // try {
-    //   const response = await axios.post(Sign_UP, {
-    //     userName: Name,
-    //     userEmail: email,
-    //     userPassword: password,
-    //   });
-    //   console.log('Data', response.data);
-    // } catch (err) {
-    //   console.log('Error', err.messasge);
-    // }
   };
 
   return (

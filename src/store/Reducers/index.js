@@ -1,10 +1,12 @@
 import {combineReducers} from 'redux';
-import AuthSlice from './AuthSlice';
+import Auth from './AuthSlice';
 import getReducer from './ProductsSlice';
 import {ProductsManagement} from './CallingProducts';
+import ProductsSlice from './ProductsSlice';
 
 const AllReducer = combineReducers({
-  AuthSlice,
+  Auth,
+  getReducer,
   // [ProductsManagement.reducerPath]: ProductsManagement.reducer,
   // getReducer,
 });

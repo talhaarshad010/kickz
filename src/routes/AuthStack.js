@@ -6,6 +6,7 @@ import LogIn from '../screens/LogIn';
 import RecoveryPassword from '../screens/RecoveryPassword';
 import SignUp from '../screens/SignUp';
 import SplashScreen from 'react-native-splash-screen';
+import Logo from '../screens/logo';
 
 const Stack = createNativeStackNavigator();
 const AuthStack = () => {
