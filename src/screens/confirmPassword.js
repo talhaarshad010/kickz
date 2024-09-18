@@ -1,11 +1,5 @@
-import {
-  Modal,
-  ScrollView,
-  StyleSheet,
-  TouchableOpacity,
-  View,
-} from 'react-native';
-import React, {useEffect, useState} from 'react';
+import {ScrollView, StyleSheet, View} from 'react-native';
+import React, {useState} from 'react';
 import {
   responsiveFontSize,
   responsiveHeight,
@@ -19,27 +13,52 @@ import MyText from '../components/TextComponent';
 import MyTextInput from '../components/TextInputComponent';
 import MyButton from '../components/CustomButton';
 import {AxiosBaseUrl} from '../config/axiosBaseUrl';
+import {checkMinLength} from '../utils/validations';
 import ToastMessage from '../Hooks/ToastMessage';
-const RecoveryPassword = ({navigation}) => {
-  const [email, setEmail] = useState('');
+const ConfirmPassword = ({navigation, route}) => {
+  const {otp, userEmail} = route.params;
+  console.log('data from route:', otp, userEmail);
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const {Toasts} = ToastMessage();
-  const CodeSender = async () => {
-    if (!email) {
-      Alert.alert('Error', 'Please enter an email');
-      return;
-    }
+  const updatePassword = async () => {
     try {
-      const response = await AxiosBaseUrl.post('/ForgotPassword', {
-        userEmail: email,
-      });
-      Toasts('Otp Sent!', response.data.message, 'info', 5000);
-      navigation.navigate('Otp', {
-        email: email,
-      });
+      if (password === confirmPassword) {
+        const newPassword = confirmPassword;
+        if (
+          checkMinLength(password, 8, 'Password') &&
+          checkMinLength(confirmPassword, 8, 'Password')
+        ) {
+          return Toasts(
+            'Error',
+            'Password must be at least 8 characters long',
+            'error',
+            4000,
+          );
+        }
+        const res = await AxiosBaseUrl.post('/UpdatePassword', {
+          userEmail: userEmail,
+          otp: otp,
+          newPassword: newPassword,
+        });
+        if (res.data.success) {
+          Toasts('INFO', res.data.message, 'info', 4000);
+          navigation.navigate('LogIn');
+        } else {
+          Toasts('INFO', res.data.message, 'info', 4000);
+        }
+      } else {
+        Toasts('INFO', 'Password must be same!', 'error', 4000);
+      }
     } catch (error) {
-      Toasts('Error', 'Email Not Exist', 'error', 5000);
+      console.log(
+        'Error occurred at confirm password:',
+        error.response ? error.response.data : error.message,
+      );
+      Toasts('Error', 'Something went wrong, please try again.', 'error', 4000);
     }
   };
+
   return (
     <WrapperContainer>
       <MyHeader
@@ -59,38 +78,44 @@ const RecoveryPassword = ({navigation}) => {
               fontWeight={'bold'}
               fontSize={responsiveFontSize(3.5)}
               textStyle={styles.HelloAgain}
-              text={'Recovery Passwrod'}
+              text={'Confirm Password'}
             />
             <MyText
               fontSize={responsiveFontSize(2)}
               textStyle={{...styles.slogan, width: responsiveWidth(70)}}
-              text={
-                'Please Enter Your Email Address To Recieve a Verification Code'
-              }
+              text={'Please Enter to confirm your password'}
             />
           </View>
           <View style={styles.cont_01_01}>
             <MyTextInput
-              value={email}
+              value={password}
               onChangeText={text => {
-                setEmail(text);
+                setPassword(text);
               }}
-              autoCapitalize="none"
-              placeholder={'Enter e-mail or password'}
-              feildName={'Email Address'}
+              placeholder={'Enter Password'}
+              feildName={'Password'}
+              textstyle={{fontSize: responsiveFontSize(1.2)}}
+            />
+            <MyTextInput
+              value={confirmPassword}
+              onChangeText={text => {
+                setConfirmPassword(text);
+              }}
+              placeholder={'Enter Password'}
+              feildName={'Confirm Password'}
               textstyle={{fontSize: responsiveFontSize(1.2)}}
             />
 
             <View>
               <MyButton
                 onPress={() => {
-                  CodeSender();
+                  updatePassword();
                 }}
                 fontWeight={'bold'}
                 color={Colors.white}
                 style={styles.btn}
                 textstyle={{fontWeight: 'bold'}}
-                text={'Send Code'}
+                text={'Confirm'}
               />
             </View>
           </View>
@@ -100,7 +125,7 @@ const RecoveryPassword = ({navigation}) => {
   );
 };
 
-export default RecoveryPassword;
+export default ConfirmPassword;
 
 const styles = StyleSheet.create({
   header: {marginTop: responsiveHeight(2)},

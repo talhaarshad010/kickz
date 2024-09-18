@@ -25,5 +25,4 @@ export const ProductsManagement = createApi({
   }),
 });
 
-export const {useGetAllproductsQuery, useLoginMutation, useSignupMutation} =
-  ProductsManagement;
+export const {useLoginMutation, useSignupMutation} = ProductsManagement;

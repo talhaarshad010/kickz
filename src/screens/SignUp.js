@@ -12,8 +12,6 @@ import MyHeader from '../components/Header';
 import MyText from '../components/TextComponent';
 import MyTextInput from '../components/TextInputComponent';
 import MyButton from '../components/CustomButton';
-import axios from 'axios';
-import {Sign_UP} from '../assets/config/urls';
 import ToastMessage from '../Hooks/ToastMessage';
 import {useSignupMutation} from '../store/Reducers/CallingProducts';
 import {checkMinLength, validateEmail} from '../utils/validations';
@@ -23,15 +21,21 @@ const SignUp = ({navigation}) => {
   const [Name, setName] = useState('');
   const {Toasts} = ToastMessage();
   const [Signup] = useSignupMutation();
+
   //--------------------- using RTK QUERY function---------------------
   const isUserSignup = async () => {
     try {
       if (!email || !password || !Name) {
-        return Toasts('Error', 'Please fill all fields', 'error');
+        return Toasts('Error', 'Please fill all fields', 'error', 2000);
       }
 
       if (!validateEmail(email)) {
-        return Toasts('Error', 'Please enter a valid email address', 'error');
+        return Toasts(
+          'Error',
+          'Please enter a valid email address',
+          'error',
+          2000,
+        );
       }
 
       if (checkMinLength(password, 8, 'Password')) {
@@ -39,6 +43,7 @@ const SignUp = ({navigation}) => {
           'Error',
           'Password must be at least 8 characters long',
           'error',
+          2000,
         );
       }
 
@@ -51,8 +56,14 @@ const SignUp = ({navigation}) => {
       setemail('');
       setpassword('');
       setName('');
-      Toasts('Info', 'User Created Successfully', 'info');
-      console.log(res);
+      if (res.error) {
+        Toasts('Info', res.error.data.error, 'info', 2000);
+      } else {
+        Toasts('Info', 'User Created Successfully', 'info', 2000);
+      }
+      if (!res.error) {
+        navigation.navigate('LogIn');
+      }
     } catch (error) {
       console.log('Error', error);
     }

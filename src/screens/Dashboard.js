@@ -15,19 +15,12 @@ import Colors from '../Styles/Colors';
 import {homeJson} from '../Json/homeJson';
 import MyText from '../components/TextComponent';
 import {useNavigation} from '@react-navigation/native';
-import {GetData} from '../store/Reducers/ProductsSlice';
 import {useDispatch, useSelector} from 'react-redux';
-import {useGetAllproductsQuery} from '../store/Reducers/productsData';
 
 const Dashboard = () => {
   const navigation = useNavigation();
   const [selectedItemIndex, setSelectedItemIndex] = useState(0);
   const [seeAll, setseeAll] = useState(false);
-  const dispatch = useDispatch();
-  const dd = useSelector(state => state.AllReducer.Auth);
-  const {data} = useGetAllproductsQuery();
-
-  console.log('DataProducts', data);
 
   const renderItem = ({item, index}) => {
     const isSelected = index === selectedItemIndex;
@@ -37,7 +30,9 @@ const Dashboard = () => {
           styles.logoCont,
           {backgroundColor: isSelected ? Colors.blue : Colors.white},
         ]}
-        onPress={() => {}}>
+        onPress={() => {
+          setSelectedItemIndex(index);
+        }}>
         <Image
           style={[
             styles.logo,

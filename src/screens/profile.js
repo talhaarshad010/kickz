@@ -14,15 +14,9 @@ import {
   responsiveWidth,
 } from 'react-native-responsive-dimensions';
 import MyTextInput from '../components/TextInputComponent';
-// import {decryptPassword} from '../utils/helperFunctions';
 const Profile = () => {
-  const dataa = useSelector(state => state.AllReducer.AuthSlice.data);
-  console.log(dataa);
-  // const [decryptedPassword, setDecryptedPassword] = useState('');
-  // useEffect(() => {
-  //   const decryptedPass = decryptPassword(dataa.userPassword);
-  //   setDecryptedPassword(decryptedPass);
-  // }, []);
+  const logedInUser = useSelector(state => state.AllReducer.Auth);
+  console.log('1111111111111111', logedInUser);
 
   const navigation = useNavigation();
   return (
@@ -44,7 +38,7 @@ const Profile = () => {
           style={styles.img}
         />
         <MyText
-          text={dataa.userName}
+          text={logedInUser.isName}
           color={Colors.black}
           fontSize={responsiveFontSize(2.5)}
           fontWeight={'500'}
@@ -53,21 +47,21 @@ const Profile = () => {
 
       <View style={styles.cont_02}>
         <MyTextInput
-          value={dataa.userName}
+          value={logedInUser.isName}
           feildName={'Full Name'}
           placeholder={'Enter name'}
         />
         <MyTextInput
-          value={dataa.userEmail}
+          value={logedInUser.isEmail}
           feildName={'Email Address'}
           placeholder={'Enter e-mail'}
         />
-        <MyTextInput
+        {/* <MyTextInput
           RightView={true}
-          value={dataa.userPassword}
+          value={logedInUser.isToken}
           feildName={'Password'}
           placeholder={'Enter password'}
-        />
+        /> */}
       </View>
     </WrapperContainer>
   );

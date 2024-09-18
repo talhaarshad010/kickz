@@ -1,11 +1,5 @@
-import {
-  Modal,
-  ScrollView,
-  StyleSheet,
-  TouchableOpacity,
-  View,
-} from 'react-native';
-import React, {useEffect, useState} from 'react';
+import {ScrollView, StyleSheet, View} from 'react-native';
+import React, {useState} from 'react';
 import {
   responsiveFontSize,
   responsiveHeight,
@@ -20,26 +14,31 @@ import MyTextInput from '../components/TextInputComponent';
 import MyButton from '../components/CustomButton';
 import {AxiosBaseUrl} from '../config/axiosBaseUrl';
 import ToastMessage from '../Hooks/ToastMessage';
-const RecoveryPassword = ({navigation}) => {
-  const [email, setEmail] = useState('');
+const OTP = ({navigation, route}) => {
+  const {email} = route.params;
+  const [otp, setOtp] = useState('');
+  const [Email, setEmail] = useState(email);
   const {Toasts} = ToastMessage();
-  const CodeSender = async () => {
-    if (!email) {
-      Alert.alert('Error', 'Please enter an email');
-      return;
-    }
+  // console.log('route data: ', otp, email);
+
+  const CodeVerify = async () => {
     try {
-      const response = await AxiosBaseUrl.post('/ForgotPassword', {
-        userEmail: email,
+      const res = await AxiosBaseUrl.post('/VerifyOtp', {
+        userEmail: Email,
+        otp: otp,
       });
-      Toasts('Otp Sent!', response.data.message, 'info', 5000);
-      navigation.navigate('Otp', {
-        email: email,
-      });
+      console.log('Received message: ', res.data.message);
+      if (res.data.message) {
+        Toasts('INFO', res.data.message, 'info', 4000);
+        navigation.navigate('ConfirmPassword', {otp: otp, userEmail: Email});
+      } else {
+        Toasts('INFO', res.data.message, 'info', 4000);
+      }
     } catch (error) {
-      Toasts('Error', 'Email Not Exist', 'error', 5000);
+      Toasts('Error', error.res.data.message, 'error', 4000);
     }
   };
+
   return (
     <WrapperContainer>
       <MyHeader
@@ -59,38 +58,35 @@ const RecoveryPassword = ({navigation}) => {
               fontWeight={'bold'}
               fontSize={responsiveFontSize(3.5)}
               textStyle={styles.HelloAgain}
-              text={'Recovery Passwrod'}
+              text={'Otp Verification'}
             />
             <MyText
               fontSize={responsiveFontSize(2)}
               textStyle={{...styles.slogan, width: responsiveWidth(70)}}
-              text={
-                'Please Enter Your Email Address To Recieve a Verification Code'
-              }
+              text={'Please Enter OTP For Changing Password'}
             />
           </View>
           <View style={styles.cont_01_01}>
             <MyTextInput
-              value={email}
               onChangeText={text => {
-                setEmail(text);
+                setOtp(text);
               }}
-              autoCapitalize="none"
-              placeholder={'Enter e-mail or password'}
-              feildName={'Email Address'}
+              value={otp}
+              placeholder={'Enter Otp'}
+              feildName={'Otp'}
               textstyle={{fontSize: responsiveFontSize(1.2)}}
             />
 
             <View>
               <MyButton
                 onPress={() => {
-                  CodeSender();
+                  CodeVerify();
                 }}
                 fontWeight={'bold'}
                 color={Colors.white}
                 style={styles.btn}
                 textstyle={{fontWeight: 'bold'}}
-                text={'Send Code'}
+                text={'Confirm'}
               />
             </View>
           </View>
@@ -100,7 +96,7 @@ const RecoveryPassword = ({navigation}) => {
   );
 };
 
-export default RecoveryPassword;
+export default OTP;
 
 const styles = StyleSheet.create({
   header: {marginTop: responsiveHeight(2)},

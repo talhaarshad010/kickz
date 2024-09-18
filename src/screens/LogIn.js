@@ -2,11 +2,9 @@ import {
   SafeAreaView,
   ScrollView,
   StyleSheet,
-  ToastAndroid,
   TouchableOpacity,
   View,
   ActivityIndicator,
-  Button,
 } from 'react-native';
 import React, {useState} from 'react';
 import {
@@ -14,38 +12,32 @@ import {
   responsiveHeight,
   responsiveWidth,
 } from 'react-native-responsive-dimensions';
-import Entypo from 'react-native-vector-icons/Entypo';
 import Colors from '../Styles/Colors';
 import WrapperContainer from '../components/WrapperContainer';
-import MyHeader from '../components/Header';
 import MyText from '../components/TextComponent';
 import MyTextInput from '../components/TextInputComponent';
 import MyButton from '../components/CustomButton';
 import {useNavigation} from '@react-navigation/native';
 import {useSelector, useDispatch} from 'react-redux';
 import {userLOGIN} from '../store/Reducers/AuthSlice';
-import {LOG_IN} from '../assets/config/urls';
 import ToastMessage from '../Hooks/ToastMessage';
-import axios from 'axios';
 import {checkMinLength, validateEmail} from '../utils/validations';
-import {apiPost} from '../config/newHelper';
 import {useLoginMutation} from '../store/Reducers/CallingProducts';
-import ProductsSlice, {GetData} from '../store/Reducers/ProductsSlice';
+import localStorage from 'redux-persist/es/storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 const LogIn = ({}) => {
   const [isLoading, setLoading] = useState(false);
-  const dataa = useSelector(state => state.AllReducer.Auth.data);
   const dispatch = useDispatch();
+  const {Toasts} = ToastMessage();
   const [value, setvalue] = useState({
-    Email: 'Admin@gmail.com',
+    Email: 'tester@gmail.com',
     Pass: '12345678',
   });
-  const {Toasts} = ToastMessage();
-
   const navigation = useNavigation();
-
   const [Login] = useLoginMutation();
   const dd = useSelector(state => state);
   console.log('Redux', dd);
+
   //---------------USER LOGIN FUNCTION---------------
   const isUserLogin = async () => {
     try {
@@ -53,34 +45,42 @@ const LogIn = ({}) => {
         userEmail: value.Email,
         userPassword: value.Pass,
       };
+      if (!validateEmail(value.Email)) {
+        return Toasts(
+          'Error',
+          'Please enter a valid email address',
+          'error',
+          2000,
+        );
+      }
 
+      if (checkMinLength(value.Pass, 8, 'Password')) {
+        return Toasts(
+          'Error',
+          'Password must be at least 8 characters long',
+          'error',
+          2000,
+        );
+      }
       const res = await Login(payload);
-      console.log('Userdata', res);
-      const {userName, userEmail, isToken} = res.data.data;
+      Toasts('Loged In', 'User loh in successfully', 'success', 4000);
+      const {userName, userEmail, isToken, userPassword} = res.data.data;
+
+      // await AsyncStorage.setItem('authToken', isToken);
       let payload1 = {
         userName: userName,
         userEmail: userEmail,
         isToken: isToken,
       };
       dispatch(userLOGIN(payload1));
-      // navigation.navigate("")
     } catch (error) {
-      console.log('Error', error.message);
+      Toasts('Error', data.error, 'error', 4000);
     }
   };
 
   return (
     <WrapperContainer>
       <SafeAreaView>
-        {/* <MyHeader
-          onPressleft={() => {
-            navigation.goBack();
-          }}
-          style={styles.header}
-          leftView={
-            <Entypo name="chevron-small-left" size={40} color={Colors.black} />
-          }
-        /> */}
         <ScrollView>
           <View style={styles.cont_01}>
             <View>

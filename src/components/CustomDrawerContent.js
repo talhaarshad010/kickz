@@ -11,28 +11,11 @@ import {
 } from 'react-native-responsive-dimensions';
 import MyText from './TextComponent';
 import Colors from '../Styles/Colors';
-import {LOG_IN} from '../assets/config/urls';
 
 const CustomDrawerContent = props => {
-  const dataa = useSelector(state => state.AllReducer.data);
+  const userName = useSelector(state => state.AllReducer.Auth.isName);
   const dispatch = useDispatch();
   const [selectedItem, setSelectedItem] = useState('Home');
-  // useEffect(() => {
-  //   const fetchDataFromDatabase = async () => {
-  //     try {
-  //       // Make GET request to backend endpoint
-  //       const response = await axios.get(LOG_IN);
-
-  //       // Access data returned by database query
-  //       const {data} = response;
-
-  //       // Process the data as needed
-  //       console.log('Data from database:', data);
-  //     } catch (error) {
-  //       console.error('Error fetching data:', error);
-  //     }
-  //   };
-  // }, []);
 
   const handleItemPress = item => {
     setSelectedItem(item);
@@ -82,7 +65,7 @@ const CustomDrawerContent = props => {
           <MyText
             color={Colors.grayInput}
             fontSize={responsiveFontSize(2)}
-            text={'HEY,'}
+            text={'HEY!'}
             textStyle={{
               textAlign: 'center',
               marginTop: responsiveHeight(2),
@@ -92,7 +75,7 @@ const CustomDrawerContent = props => {
             fontSize={responsiveFontSize(3.5)}
             color={Colors.black}
             fontWeight={'bold'}
-            // text={dataa.userName}
+            text={userName}
             textStyle={{textAlign: 'center'}}
           />
         </View>
