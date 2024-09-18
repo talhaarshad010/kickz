@@ -63,10 +63,11 @@ const LogIn = ({}) => {
         );
       }
       const res = await Login(payload);
-      Toasts('Loged In', 'User loh in successfully', 'success', 4000);
-      const {userName, userEmail, isToken, userPassword} = res.data.data;
+      Toasts('Loged In', 'User logedIn Successfully', 'success', 4000);
+      const {userName, userEmail, isToken} = res.data.data;
 
       // await AsyncStorage.setItem('authToken', isToken);
+
       let payload1 = {
         userName: userName,
         userEmail: userEmail,
