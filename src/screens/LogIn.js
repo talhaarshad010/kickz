@@ -30,8 +30,8 @@ const LogIn = ({}) => {
   const dispatch = useDispatch();
   const {Toasts} = ToastMessage();
   const [value, setvalue] = useState({
-    Email: 'tester@gmail.com',
-    Pass: '12345678',
+    Email: 'Test@gmail.com',
+    Pass: '123456789',
   });
   const navigation = useNavigation();
   const [Login] = useLoginMutation();
@@ -63,10 +63,10 @@ const LogIn = ({}) => {
         );
       }
       const res = await Login(payload);
-      Toasts('Loged In', 'User logedIn Successfully', 'success', 4000);
+      if (res?.data?.data) {
+        Toasts('Loged In', 'User logedIn Successfully', 'success', 4000);
+      }
       const {userName, userEmail, isToken} = res.data.data;
-
-      // await AsyncStorage.setItem('authToken', isToken);
 
       let payload1 = {
         userName: userName,
@@ -91,6 +91,9 @@ const LogIn = ({}) => {
                 color={Colors.black}
                 textStyle={styles.HelloAgain}
                 text={'Hello Again!'}
+                onPress={() => {
+                  navigation.navigate('Mubi');
+                }}
               />
               <MyText
                 fontSize={responsiveFontSize(2)}

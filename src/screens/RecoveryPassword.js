@@ -20,18 +20,21 @@ import MyTextInput from '../components/TextInputComponent';
 import MyButton from '../components/CustomButton';
 import {AxiosBaseUrl} from '../config/axiosBaseUrl';
 import ToastMessage from '../Hooks/ToastMessage';
+import {useForgetPasswordMutation} from '../store/Reducers/CallingProducts';
 const RecoveryPassword = ({navigation}) => {
   const [email, setEmail] = useState('');
   const {Toasts} = ToastMessage();
+  const [ForgetPassword] = useForgetPasswordMutation();
   const CodeSender = async () => {
     if (!email) {
       Alert.alert('Error', 'Please enter an email');
       return;
     }
     try {
-      const response = await AxiosBaseUrl.post('/ForgotPassword', {
+      let payload = {
         userEmail: email,
-      });
+      };
+      const response = await ForgetPassword(payload);
       Toasts('Otp Sent!', response.data.message, 'info', 5000);
       navigation.navigate('Otp', {
         email: email,

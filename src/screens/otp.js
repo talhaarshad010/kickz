@@ -14,19 +14,21 @@ import MyTextInput from '../components/TextInputComponent';
 import MyButton from '../components/CustomButton';
 import {AxiosBaseUrl} from '../config/axiosBaseUrl';
 import ToastMessage from '../Hooks/ToastMessage';
+import {useVerifyOtpMutation} from '../store/Reducers/CallingProducts';
 const OTP = ({navigation, route}) => {
   const {email} = route.params;
   const [otp, setOtp] = useState('');
   const [Email, setEmail] = useState(email);
   const {Toasts} = ToastMessage();
-  // console.log('route data: ', otp, email);
+  const [VerifyOtp] = useVerifyOtpMutation();
 
   const CodeVerify = async () => {
     try {
-      const res = await AxiosBaseUrl.post('/VerifyOtp', {
+      let payload = {
         userEmail: Email,
         otp: otp,
-      });
+      };
+      const res = await VerifyOtp(payload);
       console.log('Received message: ', res.data.message);
       if (res.data.message) {
         Toasts('INFO', res.data.message, 'info', 4000);

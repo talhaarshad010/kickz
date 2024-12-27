@@ -15,12 +15,14 @@ import MyButton from '../components/CustomButton';
 import {AxiosBaseUrl} from '../config/axiosBaseUrl';
 import {checkMinLength} from '../utils/validations';
 import ToastMessage from '../Hooks/ToastMessage';
+import {useConfirmPasswordMutation} from '../store/Reducers/CallingProducts';
 const ConfirmPassword = ({navigation, route}) => {
   const {otp, userEmail} = route.params;
   console.log('data from route:', otp, userEmail);
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const {Toasts} = ToastMessage();
+  const [ConfirmPassword] = useConfirmPasswordMutation();
   const updatePassword = async () => {
     try {
       if (password === confirmPassword) {
@@ -36,11 +38,12 @@ const ConfirmPassword = ({navigation, route}) => {
             4000,
           );
         }
-        const res = await AxiosBaseUrl.post('/UpdatePassword', {
+        let payload = {
           userEmail: userEmail,
           otp: otp,
           newPassword: newPassword,
-        });
+        };
+        const res = await ConfirmPassword(payload);
         if (res.data.success) {
           Toasts('INFO', res.data.message, 'info', 4000);
           navigation.navigate('LogIn');

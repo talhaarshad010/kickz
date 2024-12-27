@@ -53,6 +53,7 @@ const SignUp = ({navigation}) => {
         userPassword: password,
       };
       const res = await Signup(payload);
+      console.log('first', res);
       setemail('');
       setpassword('');
       setName('');
@@ -131,9 +132,7 @@ const SignUp = ({navigation}) => {
                 style={styles.btn}
                 textstyle={{fontWeight: 'bold'}}
                 text={'Sign Up'}
-                onPress={() => {
-                  isUserSignup();
-                }}
+                onPress={isUserSignup}
               />
             </View>
           </View>

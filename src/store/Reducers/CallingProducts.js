@@ -22,7 +22,38 @@ export const ProductsManagement = createApi({
         body: userData,
       }),
     }),
+
+    ForgetPassword: builder.mutation({
+      query: userData => ({
+        url: '/ForgotPassword',
+        method: 'POST',
+        headers: 'content-type: application/json',
+        body: userData,
+      }),
+    }),
+    VerifyOtp: builder.mutation({
+      query: userData => ({
+        url: '/VerifyOtp',
+        method: 'POST',
+        headers: 'content-type: application/json',
+        body: userData,
+      }),
+    }),
+    ConfirmPassword: builder.mutation({
+      query: userData => ({
+        url: '/UpdatePassword',
+        method: 'POST',
+        headers: 'content-type: application/json',
+        body: userData,
+      }),
+    }),
   }),
 });
 
-export const {useLoginMutation, useSignupMutation} = ProductsManagement;
+export const {
+  useLoginMutation,
+  useSignupMutation,
+  useForgetPasswordMutation,
+  useVerifyOtpMutation,
+  useConfirmPasswordMutation,
+} = ProductsManagement;
