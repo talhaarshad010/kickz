@@ -1,6 +1,6 @@
 import {configureStore} from '@reduxjs/toolkit';
 import AllReducer from './Reducers';
-import {ProductsManagement} from './Reducers/CallingProducts';
+import {ProductsManagement} from './API/CallingProducts';
 import {setupListeners} from '@reduxjs/toolkit/query';
 import {Products} from './Reducers/productsData';
 

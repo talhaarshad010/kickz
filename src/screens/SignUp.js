@@ -13,14 +13,14 @@ import MyText from '../components/TextComponent';
 import MyTextInput from '../components/TextInputComponent';
 import MyButton from '../components/CustomButton';
 import ToastMessage from '../Hooks/ToastMessage';
-import {useSignupMutation} from '../store/Reducers/CallingProducts';
+import {useSignupMutation} from '../store/API/CallingProducts';
 import {checkMinLength, validateEmail} from '../utils/validations';
 const SignUp = ({navigation}) => {
   const [email, setemail] = useState('');
   const [password, setpassword] = useState('');
   const [Name, setName] = useState('');
   const {Toasts} = ToastMessage();
-  const [Signup] = useSignupMutation();
+  const [Signup, {isLoading}] = useSignupMutation();
 
   //--------------------- using RTK QUERY function---------------------
   const isUserSignup = async () => {
@@ -106,14 +106,14 @@ const SignUp = ({navigation}) => {
                 value={Name}
                 placeholder={'Enter Name'}
                 feildName={'Your Name'}
-                textstyle={{fontSize: responsiveFontSize(1.2)}}
+                textstyle={{fontSize: responsiveFontSize(1.5)}}
               />
               <MyTextInput
                 onChangeText={setemail}
                 value={email}
                 placeholder={'Enter e-mail or password'}
                 feildName={'Email Address'}
-                textstyle={{fontSize: responsiveFontSize(1.2)}}
+                textstyle={{fontSize: responsiveFontSize(1.5)}}
               />
               <MyTextInput
                 onChangeText={setpassword}
@@ -121,12 +121,13 @@ const SignUp = ({navigation}) => {
                 placeholder={'Password'}
                 feildName={'Password'}
                 RightView={true}
-                textstyle={{fontSize: responsiveFontSize(1.2)}}
+                textstyle={{fontSize: responsiveFontSize(1.5)}}
               />
             </View>
 
             <View>
               <MyButton
+                isLoading={isLoading}
                 color={Colors.white}
                 fontWeight={'bold'}
                 style={styles.btn}
