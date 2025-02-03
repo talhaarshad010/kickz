@@ -22,11 +22,8 @@ import {useSelector, useDispatch} from 'react-redux';
 import {userLOGIN} from '../store/Reducers/AuthSlice';
 import ToastMessage from '../Hooks/ToastMessage';
 import {checkMinLength, validateEmail} from '../utils/validations';
-import {useLoginMutation} from '../store/Reducers/CallingProducts';
-import localStorage from 'redux-persist/es/storage';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import {useLoginMutation} from '../store/API/CallingProducts';
 const LogIn = ({}) => {
-  const [isLoading, setLoading] = useState(false);
   const dispatch = useDispatch();
   const {Toasts} = ToastMessage();
   const [value, setvalue] = useState({
@@ -34,7 +31,7 @@ const LogIn = ({}) => {
     Pass: '123456789',
   });
   const navigation = useNavigation();
-  const [Login] = useLoginMutation();
+  const [Login, {isLoading}] = useLoginMutation();
   const dd = useSelector(state => state);
   console.log('Redux', dd);
 
@@ -143,23 +140,24 @@ const LogIn = ({}) => {
                 </TouchableOpacity>
               </View>
 
-              <View>
+              {/* <View>
                 {isLoading ? (
                   <View>
                     <ActivityIndicator size={'large'} color={Colors.blue} />
                   </View>
-                ) : (
-                  <MyButton
-                    color={Colors.white}
-                    fontWeight={'bold'}
-                    onPress={() => {
-                      isUserLogin();
-                    }}
-                    style={styles.btn}
-                    text={'Sign In'}
-                  />
-                )}
-              </View>
+                ) : ( */}
+              <MyButton
+                isLoading={isLoading}
+                color={Colors.white}
+                fontWeight={'bold'}
+                onPress={() => {
+                  isUserLogin();
+                }}
+                style={styles.btn}
+                text={'Sign In'}
+              />
+              {/* )}
+              </View> */}
             </View>
             <View style={styles.cont_02}>
               <MyText text={'Already Have An Account?'} />
