@@ -15,7 +15,7 @@ import MyButton from '../components/CustomButton';
 import {AxiosBaseUrl} from '../config/axiosBaseUrl';
 import {checkMinLength} from '../utils/validations';
 import ToastMessage from '../Hooks/ToastMessage';
-import {useConfirmPasswordMutation} from '../store/Reducers/CallingProducts';
+import {useConfirmPasswordMutation} from '../store/API/CallingProducts';
 const ConfirmPassword = ({navigation, route}) => {
   const {otp, userEmail} = route.params;
   console.log('data from route:', otp, userEmail);
